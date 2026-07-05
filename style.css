@@ -1,0 +1,179 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    
+}
+body{
+    background-color: #52796f;
+}
+header{
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+main form{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.info-line{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+label{
+    font-size: 1.2rem;
+    margin-right: 0.75rem;
+}
+
+input{
+    padding: 0.3rem;
+    padding-left: 0.5rem;
+    border: none;
+    border-radius: 17px;
+}
+input[type="text"]:focus {
+    outline: none;
+}
+
+.container{
+    background-color: #ccd5ae;
+    margin-top: 2rem;
+    margin-bottom: 3.5rem;
+    padding: 2rem;
+    width: 65rem;
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+    border-radius: 20px;
+    color: #354f52;
+}
+
+.badge{
+    margin-right: 15px;
+}
+
+.divider{
+    border: none;
+    border-top: 2px solid #52796f;
+}
+
+img{
+    height: 350px;
+    width: 220px;
+    /* border-radius: 20px; */
+    box-shadow:
+            0 4px 10px rgba(18, 30, 20, 0.25),
+            0 15px 35px -5px rgba(12, 24, 15, 0.45);
+    border-radius: 12px;
+}
+
+.info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    font-size: 1.2rem;
+}
+
+/* Media query tailored to your specific HTML structure */
+@media (max-width: 768px) {
+
+    .container {
+        flex-direction: column;
+        padding: 20px;
+        align-items: center;
+        max-width: 100%;
+    }
+
+    .cover {
+        width: 100%;
+        /* Allows the poster wrapper to scale down */
+        max-width: 260px;
+        /* Keeps the movie poster at a reasonable size on mobile */
+        margin-bottom: 24px;
+        /* Pushes the movie info down, creating clean breathing room */
+    }
+
+    .cover img {
+        width: 100%;
+        /* Ensures the actual image fills its container perfectly */
+        height: auto;
+        border-radius: 8px;
+        /* Keeps the nice rounded corners on mobile */
+    }
+
+    .info {
+        width: 100%;
+        /* Lets the text content take up the full available width */
+        text-align: left;
+        /* Keeps text readable; change to 'center' if you want a centered look */
+    }
+
+    .meta-tags {
+        display: flex;
+        flex-wrap: wrap;
+        /* Allows the badges (runtime, rating, etc.) to wrap neatly if they run out of room */
+        gap: 8px;
+        /* Keeps spacing even between the badges */
+    }
+}
+
+/* Smartphone Responsive Styles */
+@media (max-width: 1200px) {
+
+    /* Reset the fixed width and stack the layout */
+    .container {
+        flex-direction: column;
+        width: 80%;
+        max-width: 400px;
+        gap: 2rem;
+        padding: 1.5rem;
+        margin: 2rem auto;
+    }
+
+    /* Make the image wrapper responsive */
+    .cover {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Let the image scale properly */
+    img {
+        height: auto;
+        /* Maintains the original aspect ratio */
+        max-width: 220px;
+        /* Keeps your preferred image size */
+        width: 100%;
+    }
+
+    /* Fix spacing for the text block */
+    .info {
+        width: 100%;
+        gap: 12px;
+        font-size: 1.05rem;
+        /* Scale down the text slightly so it fits beautifully on smaller screens */
+    }
+
+    /* Ensure meta-tags wrap if the movie title or languages are long */
+    .meta-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .badge {
+        margin-right: 0;
+        /* Let flexbox handle the spacing via gap */
+    }
+}
