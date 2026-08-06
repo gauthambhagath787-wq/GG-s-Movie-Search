@@ -1,8 +1,7 @@
-const BASE_URL = "https://imdb.iamidiotareyoutoo.com/search?q=";
 const apikey = "&apikey=4ffe0fc5"
-const infoURL = `https://www.omdbapi.com/?i=`
-
-const url = `https://api.themoviedb.org/3/search/movie?query=`;
+const omdbURL = `https://www.omdbapi.com/?i=`
+let imdbURL = `https://api.themoviedb.org/3/movie/`
+const searchUrl = `https://api.themoviedb.org/3/search/movie?query=`;
 const options = {
   method: 'GET',
   headers: {
@@ -18,30 +17,37 @@ const info = document.querySelector(".info")
 const movieListContainer = document.getElementById('movie-list');
 const error = document.getElementById('error');
 
-const getMovieInfo = async (data) => {
+
+
+
+const omdbInfo = async (imdbID) => {
+  let omdb = `${omdbURL}${imdbID}${apikey}`
+  let info = await axios.get(omdb);
+  return info
+}
+
+const getMovieInfo = async (imdb_id) => {
     try {
-        let rawData = await axios.get(url, options)
-        let dataArr = rawData.data.results;
-        console.log(dataArr);
+        let rawData = await omdbInfo(imdb_id);
+        let dataArr = rawData.data;
+        console.log(dataArr)
         const movies = {
-            img: data["Poster"],
-            plot: data["Plot"],
-            title: data["Title"],
-            released: data["Released"],
-            runtime: data["Runtime"],
-            director: data["Director"],
-            writer: data["Writer"],
-            actors: data["Actors"],
-            language: data["Language"],
-            imdbRating: data["imdbRating"]
+            img: dataArr["Poster"],
+            plot: dataArr["Plot"],
+            title: dataArr["Title"],
+            released: dataArr["Released"],
+            runtime: dataArr["Runtime"],
+            director: dataArr["Director"],
+            writer: dataArr["Writer"],
+            actors: dataArr["Actors"],
+            language: dataArr["Language"],
+            imdbRating: dataArr["imdbRating"]
         }
-        console.log(image)
-        console.log(movies.title)
         const container = document.createElement('div');
         container.className = 'container';
         container.innerHTML = `
             <div class="cover">
-                <img src="${image}" alt="${movies.img} Poster">
+                <img src="${movies.img}" alt='poster_alternate.png'>
             </div>
             <div class="info">
                 <h2 class="movie-title">${movies.title}</h2>
@@ -69,18 +75,27 @@ const getMovieInfo = async (data) => {
         console.log(err);
     }
 }
+
+const imdbInfo = async(id) => {
+  let imdbID = `${imdbURL}${id}/external_ids`
+  let infoImdb = await axios.get(imdbID, options);
+  return infoImdb.data.imdb_id
+}
+
 const getInfo = async () => {
     movieListContainer.innerHTML = "";
     const search = document.querySelector(".search-bar input").value
     try {
-        let idUrl = `${BASE_URL}${search}`
-        let response = await fetch(idUrl);
-        let data = await response.json();
-        let description = data.description;
-        description.forEach(element => {
-            let ID = element["#IMDB_ID"]
-            let img = element["#IMG_POSTER"]
-            getMovieInfo(ID, img)
+        let idUrl = `${searchUrl}${search}`
+        // let response = await fetch(idUrl);
+        let datainfo = await axios.get(idUrl, options)
+        let dataArr = datainfo.data.results;
+        dataArr.forEach(async element => {
+            let movieId = element.id;
+            let imdbId = await imdbInfo(movieId);
+            if (imdbId != null) {
+                getMovieInfo(imdbId);
+            }
         });
     } catch (err) {
         console.log(err)
