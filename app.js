@@ -2,17 +2,27 @@ const BASE_URL = "https://imdb.iamidiotareyoutoo.com/search?q=";
 const apikey = "&apikey=4ffe0fc5"
 const infoURL = `https://www.omdbapi.com/?i=`
 
+const url = `https://api.themoviedb.org/3/search/movie?query=`;
+const options = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5OTc3YTY1ZTY0YzQwYTdhMzI4ZjU1NTI5MjBiNWNjNCIsIm5iZiI6MTc4MzEyMDM5MC43NjEsInN1YiI6IjZhNDg0MjA2NTZjZDY1MzBkZmVlZjc2NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.m4ggCFUP1tayevCgW_SfALL49OeUvB9eeoXfd-4c_RA'
+
+  }
+};
+
 const form = document.querySelector("form");
 const cover = document.querySelector(".cover");
 const info = document.querySelector(".info")
 const movieListContainer = document.getElementById('movie-list');
 const error = document.getElementById('error');
 
-const getMovieInfo = async (id, image) => {
+const getMovieInfo = async (data) => {
     try {
-        let url = `${infoURL}${id}${apikey}`
-        let response = await fetch(url)
-        let data = await response.json()
+        let rawData = await axios.get(url, options)
+        let dataArr = rawData.data.results;
+        console.log(dataArr);
         const movies = {
             img: data["Poster"],
             plot: data["Plot"],
