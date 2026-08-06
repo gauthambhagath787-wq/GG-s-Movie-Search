@@ -47,7 +47,7 @@ const getMovieInfo = async (imdb_id) => {
         container.className = 'container';
         container.innerHTML = `
             <div class="cover">
-                <img src="${movies.img}" alt='poster_alternate.png'>
+                <img src="${movies.img}" alt="${movies.title} poster">
             </div>
             <div class="info">
                 <h2 class="movie-title">${movies.title}</h2>
