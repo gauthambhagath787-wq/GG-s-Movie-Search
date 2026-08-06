@@ -30,7 +30,6 @@ const omdbInfo = async (imdbID) => {
 const youtubeID = async (id) => {
     let trailer = `${trailerURL}${id}/videos`
     let info = await axios.get(trailer, options);
-    console.log(info);
     return info.data.results[0].key
 }
 
@@ -39,7 +38,6 @@ const getMovieInfo = async (imdb_id, movieID) => {
         let rawData = await omdbInfo(imdb_id);
         let youtubeKey = await youtubeID(movieID);
         let dataArr = rawData.data;
-        // console.log(dataArr)
         const movies = {
             img: dataArr["Poster"],
             plot: dataArr["Plot"],
