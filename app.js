@@ -2,6 +2,7 @@ const apikey = "&apikey=4ffe0fc5"
 const omdbURL = `https://www.omdbapi.com/?i=`
 let imdbURL = `https://api.themoviedb.org/3/movie/`
 const searchUrl = `https://api.themoviedb.org/3/search/movie?query=`;
+const trailerURL = `https://api.themoviedb.org/3/movie/`
 const options = {
   method: 'GET',
   headers: {
@@ -26,11 +27,19 @@ const omdbInfo = async (imdbID) => {
   return info
 }
 
-const getMovieInfo = async (imdb_id) => {
+const youtubeID = async (id) => {
+    let trailer = `${trailerURL}${id}/videos`
+    let info = await axios.get(trailer, options);
+    console.log(info);
+    return info.data.results[0].key
+}
+
+const getMovieInfo = async (imdb_id, movieID) => {
     try {
         let rawData = await omdbInfo(imdb_id);
+        let youtubeKey = await youtubeID(movieID);
         let dataArr = rawData.data;
-        console.log(dataArr)
+        // console.log(dataArr)
         const movies = {
             img: dataArr["Poster"],
             plot: dataArr["Plot"],
@@ -41,7 +50,8 @@ const getMovieInfo = async (imdb_id) => {
             writer: dataArr["Writer"],
             actors: dataArr["Actors"],
             language: dataArr["Language"],
-            imdbRating: dataArr["imdbRating"]
+            imdbRating: dataArr["imdbRating"],
+            youtubeId: youtubeKey
         }
         const container = document.createElement('div');
         container.className = 'container';
@@ -67,6 +77,18 @@ const getMovieInfo = async (imdb_id) => {
                     <p><span class="label">Director(s):</span> ${movies.director}</p>
                     <p><span class="label">Writer:</span> ${movies.writer}</p>
                     <p><span class="label">Actors:</span> ${movies.actors}</p>
+                </div>
+                <div class="button-wrapper">
+                    <button class="trailerBtn">
+                        <a 
+                            href="https://www.youtube.com/watch?v=${movies.youtubeId}" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            class="btn"
+                        >
+                            Watch Trailer on YouTube
+                        </a>
+                    </button>
                 </div>
             </div>
         `;
@@ -94,7 +116,7 @@ const getInfo = async () => {
             let movieId = element.id;
             let imdbId = await imdbInfo(movieId);
             if (imdbId != null) {
-                getMovieInfo(imdbId);
+                getMovieInfo(imdbId, movieId);
             }
         });
     } catch (err) {

@@ -84,7 +84,31 @@ img{
     gap: 15px;
     font-size: 1.2rem;
 }
+.button-wrapper {
+    display: flex;
+    margin-top: 1.5rem;
+}
 
+.trailerBtn {
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    /* Adjust color to fit your design */
+    color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.trailerBtn  a{
+    text-decoration: none;
+    color: white;
+}
+
+.trailerBtn:hover {
+    background-color: #0056b3;
+}
 /* Media query tailored to your specific HTML structure */
 @media (max-width: 768px) {
 
