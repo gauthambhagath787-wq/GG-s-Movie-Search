@@ -95,7 +95,7 @@ img{
     cursor: pointer;
     border: none;
     border-radius: 6px;
-    background-color: #007bff;
+    background-color: #82C26E;
     /* Adjust color to fit your design */
     color: #ffffff;
     transition: background-color 0.2s ease;
@@ -107,7 +107,7 @@ img{
 }
 
 .trailerBtn:hover {
-    background-color: #0056b3;
+    background-color: #5CB270;
 }
 /* Media query tailored to your specific HTML structure */
 @media (max-width: 768px) {

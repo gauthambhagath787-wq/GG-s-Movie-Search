@@ -34,7 +34,12 @@ const youtubeID = async (id) => {
     let key = '';
     infoArr.forEach(element => {
         if (element.type == "Trailer") {
-            key = element.key;
+            try {
+                key = element.key;
+                console.log(element.key);
+            } catch (er) {
+                console.log("Error: " + er);
+            }
         }
     })
     return key
@@ -91,7 +96,7 @@ const getMovieInfo = async (imdb_id, movieID) => {
                             rel="noopener noreferrer" 
                             class="btn"
                         >
-                            Watch Trailer on YouTube
+                            <i class="fa-solid fa-up-right-from-square"></i> Watch Trailer
                         </a>
                     </button>
                 </div>
