@@ -30,7 +30,14 @@ const omdbInfo = async (imdbID) => {
 const youtubeID = async (id) => {
     let trailer = `${trailerURL}${id}/videos`
     let info = await axios.get(trailer, options);
-    return info.data.results[0].key
+    let infoArr = info.data.results;
+    let key = '';
+    infoArr.forEach(element => {
+        if (element.type == "Trailer") {
+            key = element.key;
+        }
+    })
+    return key
 }
 
 const getMovieInfo = async (imdb_id, movieID) => {
