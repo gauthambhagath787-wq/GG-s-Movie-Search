@@ -46,67 +46,73 @@ const youtubeID = async (id) => {
 }
 
 const getMovieInfo = async (imdb_id, movieID) => {
-    try {
         let rawData = await omdbInfo(imdb_id);
         let youtubeKey = await youtubeID(movieID);
         let dataArr = rawData.data;
-        const movies = {
-            img: dataArr["Poster"],
-            plot: dataArr["Plot"],
-            title: dataArr["Title"],
-            released: dataArr["Released"],
-            runtime: dataArr["Runtime"],
-            director: dataArr["Director"],
-            writer: dataArr["Writer"],
-            actors: dataArr["Actors"],
-            language: dataArr["Language"],
-            imdbRating: dataArr["imdbRating"],
-            youtubeId: youtubeKey
+        const getMovieInfo = async (imdb_id) => {
+            try {
+                let rawData = await omdbInfo(imdb_id);
+                let dataArr = rawData.data;
+                console.log(dataArr)
+                const movies = {
+                    img: dataArr["Poster"],
+                    plot: dataArr["Plot"],
+                    title: dataArr["Title"],
+                    released: dataArr["Released"],
+                    runtime: dataArr["Runtime"],
+                    director: dataArr["Director"],
+                    writer: dataArr["Writer"],
+                    actors: dataArr["Actors"],
+                    language: dataArr["Language"],
+                    imdbRating: dataArr["imdbRating"],
+                    youtubeId: youtubeKey,
+                    imdbRating: dataArr["imdbRating"]
+                }
+                const container = document.createElement('div');
+                container.className = 'container';
+                container.innerHTML = `
+                    <div class="cover">
+                        <img src="${movies.img}" alt="${movies.title} poster">
+                    </div>
+                    <div class="info">
+                        <h2 class="movie-title">${movies.title}</h2>
+                        
+                        <div class="meta-tags">
+                            <span class="badge">${movies.released ? movies.released.split(' ').pop() : ''}</span>
+                            <span class="badge">${movies.runtime}</span>
+                            <span class="badge">${movies.language}</span>
+                            <span class="badge rating">⭐ ${movies.imdbRating}</span>
+                        </div>
+
+                        <p class="plot">${movies.plot}</p>
+                        
+                        <hr class="divider">
+
+                        <div class="credits">
+                            <p><span class="label">Director(s):</span> ${movies.director}</p>
+                            <p><span class="label">Writer:</span> ${movies.writer}</p>
+                            <p><span class="label">Actors:</span> ${movies.actors}</p>
+                        </div>
+                        <div class="button-wrapper">
+                            <button class="trailerBtn">
+                                <a 
+                                    href="https://www.youtube.com/watch?v=${movies.youtubeId}" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    class="btn"
+                                >
+                                    <i class="fa-solid fa-up-right-from-square"></i> Watch Trailer
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                        `;
+                movieListContainer.appendChild(container);
+            } catch (err) {
+                console.log(err);
+            }
         }
-        const container = document.createElement('div');
-        container.className = 'container';
-        container.innerHTML = `
-            <div class="cover">
-                <img src="${movies.img}" alt="${movies.title} poster">
-            </div>
-            <div class="info">
-                <h2 class="movie-title">${movies.title}</h2>
-                
-                <div class="meta-tags">
-                    <span class="badge">${movies.released ? movies.released.split(' ').pop() : ''}</span>
-                    <span class="badge">${movies.runtime}</span>
-                    <span class="badge">${movies.language}</span>
-                    <span class="badge rating">⭐ ${movies.imdbRating}</span>
-                </div>
-
-                <p class="plot">${movies.plot}</p>
-                
-                <hr class="divider">
-
-                <div class="credits">
-                    <p><span class="label">Director(s):</span> ${movies.director}</p>
-                    <p><span class="label">Writer:</span> ${movies.writer}</p>
-                    <p><span class="label">Actors:</span> ${movies.actors}</p>
-                </div>
-                <div class="button-wrapper">
-                    <button class="trailerBtn">
-                        <a 
-                            href="https://www.youtube.com/watch?v=${movies.youtubeId}" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            class="btn"
-                        >
-                            <i class="fa-solid fa-up-right-from-square"></i> Watch Trailer
-                        </a>
-                    </button>
-                </div>
-            </div>
-        `;
-        movieListContainer.appendChild(container);
-    } catch (err) {
-        console.log(err);
     }
-}
 
 const imdbInfo = async(id) => {
   let imdbID = `${imdbURL}${id}/external_ids`
@@ -127,6 +133,7 @@ const getInfo = async () => {
             let imdbId = await imdbInfo(movieId);
             if (imdbId != null) {
                 getMovieInfo(imdbId, movieId);
+                getMovieInfo(imdbId);
             }
         });
     } catch (err) {
