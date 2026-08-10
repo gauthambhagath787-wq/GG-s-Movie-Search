@@ -31,7 +31,7 @@ const youtubeID = async (id) => {
     let infoArr = info.data.results;
     let key = '';
     infoArr.forEach(element => {
-        if (element.type == "Trailer" || element.type == "Teaser") {
+        if (element.type == "Trailer") {
             try {
                 key = element.key;
             } catch (er) {
