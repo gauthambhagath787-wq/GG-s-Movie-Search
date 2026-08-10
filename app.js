@@ -3,6 +3,7 @@ const omdbURL = `https://www.omdbapi.com/?i=`
 let imdbURL = `https://api.themoviedb.org/3/movie/`
 const searchUrl = `https://api.themoviedb.org/3/search/movie?query=`;
 const trailerURL = `https://api.themoviedb.org/3/movie/`
+
 const options = {
   method: 'GET',
   headers: {
@@ -103,7 +104,6 @@ const imdbInfo = async(id) => {
   let infoImdb = await axios.get(imdbID, options);
   return infoImdb.data.imdb_id
 }
-
 const getInfo = async () => {
     movieListContainer.innerHTML = "";
     const search = document.querySelector(".search-bar input").value
