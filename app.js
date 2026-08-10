@@ -18,9 +18,6 @@ const info = document.querySelector(".info")
 const movieListContainer = document.getElementById('movie-list');
 const error = document.getElementById('error');
 
-
-
-
 const omdbInfo = async (imdbID) => {
   let omdb = `${omdbURL}${imdbID}${apikey}`
   let info = await axios.get(omdb);
@@ -33,7 +30,7 @@ const youtubeID = async (id) => {
     let infoArr = info.data.results;
     let key = '';
     infoArr.forEach(element => {
-        if (element.type == "Trailer") {
+        if (element.type == "Trailer" || element.type == "Teaser") {
             try {
                 key = element.key;
             } catch (er) {
@@ -68,7 +65,8 @@ const getMovieInfo = async (imdb_id, movieID) => {
         container.className = 'container';
         container.innerHTML = `
             <div class="cover">
-                <img src="${movies.img}" alt="${movies.title} poster">
+                <img src="${movies.img}" alt="Movie poster"
+                onerror="this.src='poster_alternate.png'; this.onerror=null;">
             </div>
             <div class="info">
                 <h2 class="movie-title">${movies.title}</h2>
@@ -111,7 +109,6 @@ const getInfo = async () => {
     const search = document.querySelector(".search-bar input").value
     try {
         let idUrl = `${searchUrl}${search}`
-        // let response = await fetch(idUrl);
         let datainfo = await axios.get(idUrl, options)
         let dataArr = datainfo.data.results;
         dataArr.forEach(async element => {
@@ -119,7 +116,6 @@ const getInfo = async () => {
             let imdbId = await imdbInfo(movieId);
             if (imdbId != null) {
                 getMovieInfo(imdbId, movieId);
-                getMovieInfo(imdbId);
             }
         });
     } catch (err) {
