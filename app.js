@@ -148,5 +148,4 @@ form.addEventListener("submit", (evt) => {
     const search = document.querySelector(".search-bar input").value
     getInfo(search)
     form.reset();
-    document.activeElement.blur();
 })
