@@ -43,24 +43,14 @@ const youtubeID = async (id) => {
     return key
 }
 
-const moviePoster = async (id) => {
-    let posterPath = `${posterURL}${id}/images`;
-    let info = await axios.get(posterPath, options);
-    let posters = info.data.posters;
-    let imageURL = `https://image.tmdb.org/t/p/original`
-    let filePath = `${imageURL}${posters[0].file_path}`
-    return filePath
-}
-
-const getMovieInfo = async (imdb_id, movieID) => {
+const getMovieInfo = async (imdb_id, movieID, moviePoster) => {
     try {
         let rawData = await omdbInfo(imdb_id);
         let youtubeKey = await youtubeID(movieID);
-        let moviePosterPath = await moviePoster(imdb_id);
         let dataArr = rawData.data;
 
         const movies = {
-            img: moviePosterPath, //dataArr["Poster"], 
+            img: moviePoster, //dataArr["Poster"], 
             plot: dataArr["Plot"],
             title: dataArr["Title"],
             released: dataArr["Released"],
@@ -91,7 +81,7 @@ const getMovieInfo = async (imdb_id, movieID) => {
                 <p class="plot">${movies.plot}</p>
                 <hr class="divider">
                 <div class="credits">
-                    <p><span class="label">Director(s):</span> ${movies.director}</p>
+                    <p><span class="label">Director/s:</span> ${movies.director}</p>
                     <p><span class="label">Writer:</span> ${movies.writer}</p>
                     <p><span class="label">Actors:</span> ${movies.actors}</p>
                 </div>
@@ -115,18 +105,35 @@ const imdbInfo = async(id) => {
   let infoImdb = await axios.get(imdbID, options);
   return infoImdb.data.imdb_id
 }
-const getInfo = async () => {
+
+const moviePoster = async (id, lang) => {
+    let posterPath = `${posterURL}${id}/images`;
+    let info = await axios.get(posterPath, options);
+    let posters = info.data.posters;
+    let imageURL = `https://image.tmdb.org/t/p/original`
+   
+    for (poster of posters) {
+        if (poster["iso_639_1"] == lang || poster["iso_639_1"] == "en") {
+            let filePath = `${imageURL}${poster.file_path}`
+            return filePath
+        }
+    }
+}
+const getInfo = async (search) => {
     movieListContainer.innerHTML = "";
-    const search = document.querySelector(".search-bar input").value
     try {
         let idUrl = `${searchUrl}${search}`
         let datainfo = await axios.get(idUrl, options)
         let dataArr = datainfo.data.results;
+        count = 0;
         dataArr.forEach(async element => {
+            count++;
             let movieId = element.id;
+            let language = dataArr[0].original_language
             let imdbId = await imdbInfo(movieId);
+            let moviePosterPath = await moviePoster(imdbId, language);
             if (imdbId != null) {
-                getMovieInfo(imdbId, movieId);
+                getMovieInfo(imdbId, movieId, moviePosterPath);
             }
         });
     } catch (err) {
@@ -138,5 +145,7 @@ const getInfo = async () => {
 
 form.addEventListener("submit", (evt) => {
     evt.preventDefault()
-    getInfo()
+    const search = document.querySelector(".search-bar input").value
+    getInfo(search)
+    form.reset();
 })
