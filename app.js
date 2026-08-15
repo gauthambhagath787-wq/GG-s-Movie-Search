@@ -3,6 +3,7 @@ const omdbURL = `https://www.omdbapi.com/?i=`
 let imdbURL = `https://api.themoviedb.org/3/movie/`
 const searchUrl = `https://api.themoviedb.org/3/search/movie?query=`;
 const trailerURL = `https://api.themoviedb.org/3/movie/`
+const posterURL =  `https://api.themoviedb.org/3/movie/`
 
 const options = {
   method: 'GET',
@@ -42,14 +43,24 @@ const youtubeID = async (id) => {
     return key
 }
 
+const moviePoster = async (id) => {
+    let posterPath = `${posterURL}${id}/images`;
+    let info = await axios.get(posterPath, options);
+    let posters = info.data.posters;
+    let imageURL = `https://image.tmdb.org/t/p/original`
+    let filePath = `${imageURL}${posters[0].file_path}`
+    return filePath
+}
+
 const getMovieInfo = async (imdb_id, movieID) => {
     try {
         let rawData = await omdbInfo(imdb_id);
         let youtubeKey = await youtubeID(movieID);
+        let moviePosterPath = await moviePoster(imdb_id);
         let dataArr = rawData.data;
 
         const movies = {
-            img: dataArr["Poster"],
+            img: moviePosterPath, //dataArr["Poster"], 
             plot: dataArr["Plot"],
             title: dataArr["Title"],
             released: dataArr["Released"],
